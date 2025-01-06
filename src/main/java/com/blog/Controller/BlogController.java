@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/blog")
+@RequestMapping("/api/blog")
 @CrossOrigin
 public class BlogController {
 
