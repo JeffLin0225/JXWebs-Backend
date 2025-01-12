@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -63,6 +65,10 @@ public class BlogController {
             String blogTitleSubject = (String) title[1];
             Integer contentId = (Integer) title[2];
             String contentSubject = (String) title[3];
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String createtime = ((Timestamp) title[4]).toLocalDateTime().format(formatter);
+            String updatetime = title[5] == null ? null : ((Timestamp) title[5]).toLocalDateTime().format(formatter);
+
 
             Map<String, Object> blogTitle = map.getOrDefault(blogTitleId, new HashMap<>());
             blogTitle.putIfAbsent("id", blogTitleId);
@@ -72,6 +78,8 @@ public class BlogController {
             Map<String, Object> child = new HashMap<>();
             child.put("id", contentId);
             child.put("subject", contentSubject);
+            child.put("createtime", createtime);
+            child.put("updatetime", updatetime);
             children.add(child);
             blogTitle.put("children", children);
 
