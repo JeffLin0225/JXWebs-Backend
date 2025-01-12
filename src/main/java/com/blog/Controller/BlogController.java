@@ -25,35 +25,11 @@ public class BlogController {
     @Autowired
     private BlogContentRepository blogContentRepository;
 
-    @GetMapping("/findBlogTitle")
+    @GetMapping("/findAllBlogTitle")
     public List<BlogTitle> findBlogTitle(){
         List<BlogTitle> result =  blogTitleRepository.findAll();
         return result;
     }
-
-    @PostMapping("/insertBlogTitle")
-    public String  insertTitle(@RequestBody BlogTitle blogTitle){
-        blogTitleRepository.save(blogTitle);
-        return "新增標題成功！！";
-    }
-
-    @GetMapping("/findBlogContent")
-    public List<BlogContent> findBlogContent(){
-        List<BlogContent> result =  blogContentRepository.findAll();
-        return result;
-    }
-
-    @PostMapping("/insertBlogContent")
-    public String  insertBlogContent(@RequestBody BlogContent blogContent){
-        BlogTitle blogTitle = blogTitleRepository.findById(blogContent.getBlogTitle().getId())
-                .orElseThrow(() -> new IllegalArgumentException("BlogTitle not found"));
-
-        blogContent.setBlogTitle(blogTitle); // 设置关联关系
-        blogContentRepository.save(blogContent); // 保存内容
-
-        return "新增文章成功！！";
-    }
-
 
     @GetMapping("/titles")
     public List<Map<String, Object>> getAllTitles() {
