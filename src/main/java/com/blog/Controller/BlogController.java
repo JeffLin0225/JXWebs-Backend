@@ -1,6 +1,5 @@
 package com.blog.Controller;
 
-import com.blog.DTO.BlogTitleDTO;
 import com.blog.Entity.BlogContent;
 import com.blog.Entity.BlogTitle;
 import com.blog.Repository.BlogContentRepository;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/blog")

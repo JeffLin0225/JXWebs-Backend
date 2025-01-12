@@ -5,12 +5,12 @@ import com.blog.Entity.BlogTitle;
 import com.blog.Repository.BlogContentRepository;
 import com.blog.Repository.BlogTitleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/writeblog")
@@ -38,6 +38,21 @@ public class WriteBlogController {
         blogContentRepository.save(blogContent); // 保存内容
 
         return "新增文章成功！！";
+    }
+
+    @PutMapping("/modifyBlogContent")
+    public String putMethodName(@RequestBody BlogContent blogContent) {
+        Optional<BlogContent> result = blogContentRepository.findById(blogContent.getId());
+        if(result.isEmpty()){
+            return "沒有該文章";
+        }
+        BlogContent theBlogContent =  result.get();
+        theBlogContent.setSubject(blogContent.getSubject());
+        theBlogContent.setContent(blogContent.getContent());
+        theBlogContent.setUpdatetime(new Timestamp(0));
+        blogContentRepository.save(theBlogContent); // 保存内容
+        
+        return "更新文章成功";
     }
 
 }
