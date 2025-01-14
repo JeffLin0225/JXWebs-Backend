@@ -5,6 +5,9 @@ import com.blog.Entity.BlogTitle;
 import com.blog.Repository.BlogContentRepository;
 import com.blog.Repository.BlogTitleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -55,4 +58,17 @@ public class WriteBlogController {
         return "更新文章成功";
     }
 
+    @DeleteMapping("/deleteBlog/{id}")
+    public ResponseEntity<String> deleteBlog(@PathVariable("id") Integer id ){
+        try {
+            Optional<BlogContent> result = blogContentRepository.findById(id);
+            if(result.isEmpty()){
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("沒有該部落格文章");
+            }
+            blogContentRepository.deleteById(id);
+            return ResponseEntity.ok("刪除文章成功！！！");
+        } catch (Exception e) {
+           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除錯誤");
+        }
+    }
 }

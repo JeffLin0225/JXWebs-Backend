@@ -23,14 +23,20 @@ public class BlogController {
     @Autowired
     private BlogContentRepository blogContentRepository;
 
-    @GetMapping("/findAllBlogTitle")
-    public List<BlogTitle> findBlogTitle(){
+    /*
+    查詢全部 大標題
+     */
+    @GetMapping("/findAllBlogBigTitle")
+    public List<BlogTitle> findAllBlogBigTitle(){
         List<BlogTitle> result =  blogTitleRepository.findAll();
         return result;
     }
 
-    @GetMapping("/titles")
-    public List<Map<String, Object>> getAllTitles() {
+    /*
+    查詢全部 子標題
+     */
+    @GetMapping("/findAllBlogChildTitle")
+    public List<Map<String, Object>> findAllBlogChildTitle() {
         System.out.println("查詢");
         List<Object[]> titles = blogContentRepository.findAllBlogContent();
         Map<Integer, Map<String, Object>> map = new HashMap<>();
@@ -63,6 +69,9 @@ public class BlogController {
         return new ArrayList<>(map.values());
     }
 
+    /**
+     查詢 該文章內容 HTML
+     **/
     @GetMapping("/content/{id}")
     public ResponseEntity<BlogContent> getContentById(@PathVariable Integer id) {
         Optional<BlogContent> content = blogContentRepository.findById(id);
