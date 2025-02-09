@@ -4,6 +4,8 @@ import com.blog.Entity.BlogContent;
 import com.blog.Entity.BlogTitle;
 import com.blog.Repository.BlogContentRepository;
 import com.blog.Repository.BlogTitleRepository;
+import com.blog.Service.RedisCommonService;
+import com.blog.Service.WriteBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -18,56 +20,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/api/writeblog")
 public class WriteBlogController {
+    private final WriteBlogService writeBlogService;
+    private final RedisCommonService redisCommonService;
 
-    @Autowired
-    private BlogTitleRepository blogTitleRepository;
-
-    @Autowired
-    private BlogContentRepository blogContentRepository;
+    public WriteBlogController(WriteBlogService writeBlogService, RedisCommonService redisCommonService) {
+        this.writeBlogService = writeBlogService;
+        this.redisCommonService = redisCommonService;
+    }
 
     @PostMapping("/insertBlogTitle")
     public String  insertTitle(@RequestBody BlogTitle blogTitle){
-        blogTitleRepository.save(blogTitle);
-        return "新增標題成功！！";
+        String result = writeBlogService.insertTitle_Service(blogTitle);
+        redisCommonService.deleteRedisByKey("blogTitleList");
+        return result;
     }
 
     @PostMapping("/insertBlogContent")
     public String  insertBlogContent(@RequestBody BlogContent blogContent){
-        BlogTitle blogTitle = blogTitleRepository.findById(blogContent.getBlogTitle().getId())
-                .orElseThrow(() -> new IllegalArgumentException("BlogTitle not found"));
-
-        blogContent.setBlogTitle(blogTitle); // 设置关联关系
-        blogContentRepository.save(blogContent); // 保存内容
-
-        return "新增文章成功！！";
+        String result = writeBlogService.insertBlogContent_Serivce(blogContent);
+        redisCommonService.deleteRedisByKey("blogChildTitleList");
+        return result;
     }
 
     @PutMapping("/modifyBlogContent")
-    public String putMethodName(@RequestBody BlogContent blogContent) {
-        Optional<BlogContent> result = blogContentRepository.findById(blogContent.getId());
-        if(result.isEmpty()){
-            return "沒有該文章";
-        }
-        BlogContent theBlogContent =  result.get();
-        theBlogContent.setSubject(blogContent.getSubject());
-        theBlogContent.setContent(blogContent.getContent());
-        theBlogContent.setUpdatetime(new Timestamp(System.currentTimeMillis()));
-        blogContentRepository.save(theBlogContent); // 保存内容
-        
-        return "更新文章成功";
+    public String modifyBlogContent(@RequestBody BlogContent blogContent) {
+        String result = writeBlogService.modifyBlogContent_Serivce(blogContent);
+        redisCommonService.deleteRedisByKey("BlogContent:" + blogContent.getId());
+        redisCommonService.deleteRedisByKey("blogChildTitleList");
+        return result;
     }
 
     @DeleteMapping("/deleteBlog/{id}")
-    public ResponseEntity<String> deleteBlog(@PathVariable("id") Integer id ){
-        try {
-            Optional<BlogContent> result = blogContentRepository.findById(id);
-            if(result.isEmpty()){
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("沒有該部落格文章");
-            }
-            blogContentRepository.deleteById(id);
-            return ResponseEntity.ok("刪除文章成功！！！");
-        } catch (Exception e) {
-           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("刪除錯誤");
-        }
+    public String deleteBlog(@PathVariable("id") Integer id ){
+        String result = writeBlogService.deleteBlogById_Serive(id);
+        redisCommonService.deleteRedisByKey("BlogContent:" + id);
+        redisCommonService.deleteRedisByKey("blogChildTitleList");
+        return result;
     }
 }
