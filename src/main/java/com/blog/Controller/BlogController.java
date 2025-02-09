@@ -1,5 +1,6 @@
 package com.blog.Controller;
 
+import com.blog.DTO.BlogContentDTO;
 import com.blog.Entity.BlogContent;
 import com.blog.Entity.BlogTitle;
 import com.blog.Repository.BlogContentRepository;
@@ -14,7 +15,6 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/blog")
-@CrossOrigin
 public class BlogController {
 
     @Autowired
@@ -48,7 +48,6 @@ public class BlogController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String createtime = ((Timestamp) title[4]).toLocalDateTime().format(formatter);
             String updatetime = title[5] == null ? null : ((Timestamp) title[5]).toLocalDateTime().format(formatter);
-
 
             Map<String, Object> blogTitle = map.getOrDefault(blogTitleId, new HashMap<>());
             blogTitle.putIfAbsent("id", blogTitleId);

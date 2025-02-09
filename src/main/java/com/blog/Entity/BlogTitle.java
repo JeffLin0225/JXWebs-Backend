@@ -17,7 +17,7 @@ public class BlogTitle {
 
     private Timestamp createtime;
 
-    @OneToMany(mappedBy = "blogTitle", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "blogTitle", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<BlogContent> blogContents;
 
 

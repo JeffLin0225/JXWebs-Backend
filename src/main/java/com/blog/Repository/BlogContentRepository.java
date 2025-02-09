@@ -1,5 +1,6 @@
 package com.blog.Repository;
 
+import com.blog.DTO.BlogContentDTO;
 import com.blog.Entity.BlogContent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,8 +15,5 @@ public interface BlogContentRepository extends JpaRepository<BlogContent,Integer
 
     @Query("SELECT b.blogTitle.id, b.blogTitle.subject, b.id, b.subject ,b.createtime , b.updatetime FROM BlogContent b")
     List<Object[]> findAllBlogContent();
-
-    
-
 
 }

@@ -2,14 +2,14 @@ package com.blog.DTO;
 
 import java.sql.Timestamp;
 
-public class BlogTitleDTO {
+public class BlogContentDTO {
     private Integer id;
     private String subject;
     private Integer blogTitleId;
     private Timestamp createtime;
     private Timestamp updatetime;
 
-    public BlogTitleDTO(Integer id, String subject, Integer blogTitleId , Timestamp createtime, Timestamp updatetime) {
+    public BlogContentDTO(Integer id, String subject, Integer blogTitleId , Timestamp createtime, Timestamp updatetime) {
         this.id = id;
         this.subject = subject;
         this.blogTitleId = blogTitleId;

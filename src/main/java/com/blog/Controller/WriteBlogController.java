@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/writeblog")
-@CrossOrigin
 public class WriteBlogController {
 
     @Autowired
@@ -52,7 +51,7 @@ public class WriteBlogController {
         BlogContent theBlogContent =  result.get();
         theBlogContent.setSubject(blogContent.getSubject());
         theBlogContent.setContent(blogContent.getContent());
-        theBlogContent.setUpdatetime(new Timestamp(0));
+        theBlogContent.setUpdatetime(new Timestamp(System.currentTimeMillis()));
         blogContentRepository.save(theBlogContent); // 保存内容
         
         return "更新文章成功";
