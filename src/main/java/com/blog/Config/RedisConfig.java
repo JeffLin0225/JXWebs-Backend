@@ -1,4 +1,4 @@
-package com.example.redisdemo.Config;
+package com.blog.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -9,13 +9,15 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
+import static com.blog.Config.RedisSetting.DB_DEFAULT;
+
 @Component
 public class RedisConfig {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setDatabase(1);
+        configuration.setDatabase(DB_DEFAULT.getValues());
     return new LettuceConnectionFactory(configuration);
     }
 
