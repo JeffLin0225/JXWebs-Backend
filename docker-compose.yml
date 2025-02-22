@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  blog:
+    image: jefflin0225/spring-jxwbes-blog:latest  # 替換為你的 Spring Boot 映像
+    container_name: blog
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/BlogDB
+      - SPRING_DATASOURCE_USERNAME=linjiaxian
+      - SPRING_DATA_REDIS_URL=redis://host.docker.internal:6379
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"

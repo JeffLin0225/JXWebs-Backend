@@ -2,30 +2,32 @@ package com.blog.Controller;
 
 import com.blog.Entity.BlogContent;
 import com.blog.Entity.BlogTitle;
-import com.blog.Repository.BlogContentRepository;
 import com.blog.Repository.BlogTitleRepository;
 import com.blog.Service.RedisCommonService;
 import com.blog.Service.WriteBlogService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.util.*;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/writeblog")
 public class WriteBlogController {
     private final WriteBlogService writeBlogService;
     private final RedisCommonService redisCommonService;
+    private final BlogTitleRepository blogTitleRepository;
 
-    public WriteBlogController(WriteBlogService writeBlogService, RedisCommonService redisCommonService) {
+    public WriteBlogController(WriteBlogService writeBlogService, RedisCommonService redisCommonService ,BlogTitleRepository blogTitleRepository) {
         this.writeBlogService = writeBlogService;
         this.redisCommonService = redisCommonService;
+        this.blogTitleRepository = blogTitleRepository;
+    }
+
+    @GetMapping("/getBlogTitle/{id}")
+    public String  insertTitle(@PathVariable int id){
+        Optional<BlogTitle> bOptional = blogTitleRepository.findById(id);
+        BlogTitle blogTitle = bOptional.get();
+        String result = blogTitle.getSubject();
+        return result;
     }
 
     @PostMapping("/insertBlogTitle")
