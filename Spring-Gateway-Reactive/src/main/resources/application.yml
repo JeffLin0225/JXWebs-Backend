@@ -1,0 +1,35 @@
+# spring:
+#   cloud:
+#     gateway:
+#       routes:
+#         - id: auth_route
+#           uri: http://localhost:8081
+#           predicates:
+#             - Path=/auth/**
+#         - id: user_route
+#           uri: http://localhost:8082
+#           predicates:
+#             - Path=/user/**
+
+# spring:
+#   cloud:
+#     gateway:
+#       globalcors:
+#         corsConfigurations:
+#           '[/**]':
+#             allowedOrigins: 
+#               - "https://jxwebs.com"
+#             allowedMethods:
+#               - GET
+#               - POST
+#               - PUT
+#               - DELETE
+#               - OPTIONS
+#             allowedHeaders: "*"
+#             allowCredentials: true
+server:
+  port: 8093
+# JWT 配置
+jwt:
+  token:
+    expire: 3600000
